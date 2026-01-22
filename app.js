@@ -143,6 +143,7 @@ function atualizarDashboard() {
   dPres.innerText = ponto.filter(p => p.data===hoje && p.tipo==="Presente").length;
   dFalt.innerText = ponto.filter(p => p.data===hoje && p.tipo==="Falta").length;
   dAtra.innerText = ponto.filter(p => p.data===hoje && p.tipo==="Atraso").length;
+  dTarAnd.innerText = tarefas.filter(t => t.status === "Em andamento").length;
 
   const porFuncao = {};
   ponto.filter(p => p.data===hoje).forEach(p => {
@@ -198,8 +199,10 @@ function atualizarDashboard() {
   dAtra.innerText = pontoHoje.filter(p => p.tipo === "Atraso").length;
 
   // --- TAREFAS ---
-  dTarPend.innerText = tarefas.filter(t => t.status !== "Concluída").length;
-  dTarConc.innerText = tarefas.filter(t => t.status === "Concluída").length;
+dTarPend.innerText = tarefas.filter(t => t.status === "Pendente").length;
+dTarAnd.innerText  = tarefas.filter(t => t.status === "Em andamento").length;
+dTarConc.innerText = tarefas.filter(t => t.status === "Concluída").length;
+
 
   // --- VEÍCULOS ---
   dVeicAt.innerText = veiculos.filter(v => v.status === "Ativo").length;
