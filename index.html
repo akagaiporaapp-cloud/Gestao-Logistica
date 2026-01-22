@@ -5,8 +5,6 @@
   <title>Gestão Logística</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#004aad">
 </head>
 <body>
 
@@ -23,39 +21,16 @@
 
 <main>
 
-<!-- DASHBOARD -->
 <section id="dashboard" class="tela ativa">
- 
-<!-- BACKUP / RESTAURAÇÃO -->
-<h3>💾 Backup e Restauração</h3>
 
-<div class="cards">
-  <div class="card">
-    <button onclick="exportarJSON()">⬇️ Exportar JSON</button>
+  <!-- ALERTA -->
+  <div id="alertaDesfalque" class="alerta" style="display:none;">
+    ⚠️ Atenção: desfalque operacional
+    <ul id="listaDesfalque"></ul>
   </div>
 
-  <div class="card">
-    <label style="cursor:pointer;">
-      ⬆️ Importar JSON
-      <input
-        type="file"
-        id="importJson"
-        accept=".json"
-        onchange="importarJSON(event)"
-        style="display:none"
-      >
-    </label>
-  </div>
-</div>
+  <h2>📊 Visão Geral (Hoje)</h2>
 
-<br> <br> 
-
-
- <h2>📊 Visão Geral (Hoje)</h2>
-
-
-
-  <!-- PRESENÇA -->
   <div class="cards">
     <div class="card">👥 Colaboradores<br><span id="dColabs">0</span></div>
     <div class="card">✅ Presentes<br><span id="dPres">0</span></div>
@@ -63,36 +38,43 @@
     <div class="card">⏰ Atrasos<br><span id="dAtra">0</span></div>
   </div>
 
-  <!-- TAREFAS -->
   <h3>📦 Tarefas</h3>
-<div class="cards">
-  <div class="card">🟠 Pendentes<br><span id="dTarPend">0</span></div>
-  <div class="card">🟡 Em andamento<br><span id="dTarAnd">0</span></div>
-  <div class="card">🟢 Concluídas<br><span id="dTarConc">0</span></div>
-</div>
+  <div class="cards">
+    <div class="card">🟠 Pendentes<br><span id="dTarPend">0</span></div>
+    <div class="card">🟡 Em andamento<br><span id="dTarAnd">0</span></div>
+    <div class="card">🟢 Concluídas<br><span id="dTarConc">0</span></div>
+  </div>
 
-
-  <!-- VEÍCULOS -->
   <h3>🚗 Veículos</h3>
   <div class="cards">
     <div class="card">✅ Ativos<br><span id="dVeicAt">0</span></div>
     <div class="card">🛠️ Manutenção<br><span id="dVeicMan">0</span></div>
   </div>
 
-  <!-- PRESENÇA POR FUNÇÃO -->
   <h3>📌 Presença por Função</h3>
   <ul id="presencaPorFuncao"></ul>
-</section>
 
+  <h3>💾 Backup</h3>
+  <div class="cards">
+    <div class="card">
+      <button onclick="exportarJSON()">⬇️ Exportar JSON</button>
+    </div>
+    <div class="card">
+      <label style="cursor:pointer;">
+        ⬆️ Importar JSON
+        <input type="file" accept=".json" onchange="importarJSON(event)" hidden>
+      </label>
+    </div>
+  </div>
+
+</section>
 
 <!-- COLABORADORES -->
 <section id="colaboradores" class="tela">
   <h2>👥 Colaboradores</h2>
-
   <form onsubmit="addColaborador(event)">
     <input id="colabNome" required placeholder="Nome">
     <select id="colabFuncao">
-      <option>Carteiro</option>
       <option>Motorista</option>
       <option>Motociclista</option>
       <option>Pedestre</option>
@@ -102,14 +84,12 @@
     </select>
     <button>Adicionar</button>
   </form>
-
   <ul id="listaColaboradores"></ul>
 </section>
 
 <!-- PONTO -->
 <section id="ponto" class="tela">
   <h2>🕒 Ponto Diário</h2>
-
   <form onsubmit="registrarPonto(event)">
     <select id="pontoColab"></select>
     <input type="date" id="pontoData" required>
@@ -121,14 +101,12 @@
     <input id="pontoObs" placeholder="Observação">
     <button>Registrar</button>
   </form>
-
   <ul id="listaPonto"></ul>
 </section>
 
 <!-- TAREFAS -->
 <section id="tarefas" class="tela">
   <h2>📦 Tarefas</h2>
-
   <form onsubmit="addTarefa(event)">
     <input id="tarefaDesc" required placeholder="Descrição">
     <input id="tarefaSetor" placeholder="Setor">
@@ -140,14 +118,12 @@
     </select>
     <button>Criar</button>
   </form>
-
   <ul id="listaTarefas"></ul>
 </section>
 
 <!-- VEÍCULOS -->
 <section id="veiculos" class="tela">
   <h2>🚗 Veículos</h2>
-
   <form onsubmit="addVeiculo(event)">
     <input id="veicPlaca" required placeholder="Placa / ID">
     <select id="veicTipo">
@@ -161,7 +137,6 @@
     </select>
     <button>Adicionar</button>
   </form>
-
   <ul id="listaVeiculos"></ul>
 </section>
 

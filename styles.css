@@ -21,7 +21,6 @@ nav button {
   border: none;
   background: #003080;
   color: white;
-  cursor: pointer;
 }
 
 main {
@@ -45,6 +44,14 @@ main {
   text-align: center;
 }
 
+.alerta {
+  background: #ffe5e5;
+  border-left: 6px solid #d60000;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+}
+
 form {
   display: flex;
   flex-wrap: wrap;
@@ -53,8 +60,8 @@ form {
 }
 
 input, select, button {
-  flex: 1 1 140px;
   padding: 8px;
+  flex: 1 1 140px;
 }
 
 ul {
