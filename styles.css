@@ -1,0 +1,70 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+}
+
+header {
+  background: #004aad;
+  color: white;
+  padding: 10px;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+nav button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: #003080;
+  color: white;
+  cursor: pointer;
+}
+
+main {
+  padding: 15px;
+}
+
+.tela { display: none; }
+.tela.ativa { display: block; }
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  flex: 1 1 140px;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 15px;
+}
+
+input, select, button {
+  flex: 1 1 140px;
+  padding: 8px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: white;
+  margin-bottom: 6px;
+  padding: 10px;
+  border-radius: 6px;
+}
