@@ -399,3 +399,87 @@ select option[value="Manutenção"] { background-color: #fff3cd; }
 ::-webkit-scrollbar-thumb:hover {
   background: #003080;
 }
+
+/* Adicionar ao final do arquivo CSS */
+
+/* Detalhes de veículos por tipo */
+.detalhes-veiculos {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.tipo-veiculo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.tipo-veiculo:last-child {
+  border-bottom: none;
+}
+
+.tipo-veiculo span:first-child {
+  font-weight: bold;
+  color: #003080;
+  flex: 1;
+}
+
+.tipo-veiculo .ativo {
+  background: #d4edda;
+  color: #155724;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin: 0 5px;
+  font-size: 0.9em;
+  min-width: 80px;
+  text-align: center;
+}
+
+.tipo-veiculo .manutencao {
+  background: #fff3cd;
+  color: #856404;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin: 0 5px;
+  font-size: 0.9em;
+  min-width: 120px;
+  text-align: center;
+}
+
+.tipo-veiculo .total {
+  background: #e2e3e5;
+  color: #383d41;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin: 0 5px;
+  font-size: 0.9em;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Responsividade para detalhes de veículos */
+@media (max-width: 768px) {
+  .tipo-veiculo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  .tipo-veiculo span {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .tipo-veiculo .ativo,
+  .tipo-veiculo .manutencao,
+  .tipo-veiculo .total {
+    width: auto;
+    margin: 2px 0;
+  }
+}
