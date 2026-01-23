@@ -13,6 +13,12 @@ let pontoFiltrado = [];
 function mostrar(id) {
   document.querySelectorAll(".tela").forEach(t => t.classList.remove("ativa"));
   document.getElementById(id).classList.add("ativa");
+  
+  // Forçar atualização do dashboard quando for mostrado
+  if (id === 'dashboard') {
+    setTimeout(atualizarDashboard, 100);
+  }
+  
   atualizarTudo();
 }
 
@@ -36,6 +42,8 @@ function addColaborador(e) {
 
 function listarColaboradores(filtrados = colaboradores) {
   const listaColaboradores = document.getElementById('listaColaboradores');
+  if (!listaColaboradores) return;
+  
   listaColaboradores.innerHTML = "";
   
   if (filtrados.length === 0) {
@@ -79,6 +87,8 @@ function removerColaborador(id) {
 // ---------- PONTO ----------
 function carregarColabsPonto() {
   const pontoColab = document.getElementById('pontoColab');
+  if (!pontoColab) return;
+  
   pontoColab.innerHTML = '<option value="">Selecione um colaborador</option>';
   colaboradores.forEach(c => {
     pontoColab.innerHTML += `<option value="${c.nome}">${c.nome} (${c.funcao})</option>`;
@@ -98,18 +108,15 @@ function registrarPonto(e) {
     return;
   }
 
-  // Encontrar se já existe registro para este colaborador na data
   const existente = ponto.find(
     p => p.colaborador === colaborador && p.data === data
   );
 
   if (existente) {
-    // Atualizar registro existente
     existente.tipo = tipo;
     existente.obs = obs;
     existente.funcao = colaboradores.find(c => c.nome === colaborador)?.funcao || "";
   } else {
-    // Criar novo registro
     ponto.push({
       id: Date.now(),
       colaborador: colaborador,
@@ -128,6 +135,8 @@ function registrarPonto(e) {
 
 function listarPonto(filtrados = ponto) {
   const listaPonto = document.getElementById('listaPonto');
+  if (!listaPonto) return;
+  
   listaPonto.innerHTML = "";
   
   if (filtrados.length === 0) {
@@ -166,10 +175,10 @@ function listarPonto(filtrados = ponto) {
 }
 
 function filtrarPonto() {
-  const filtroNome = document.getElementById('filtroPontoColab').value.toLowerCase();
-  const filtroTipo = document.getElementById('filtroPontoTipo').value;
-  const filtroFuncao = document.getElementById('filtroPontoFuncao').value;
-  const filtroData = document.getElementById('filtroPontoData').value;
+  const filtroNome = document.getElementById('filtroPontoColab')?.value.toLowerCase() || '';
+  const filtroTipo = document.getElementById('filtroPontoTipo')?.value || '';
+  const filtroFuncao = document.getElementById('filtroPontoFuncao')?.value || '';
+  const filtroData = document.getElementById('filtroPontoData')?.value || '';
   
   pontoFiltrado = ponto.filter(p => {
     const nomeMatch = p.colaborador.toLowerCase().includes(filtroNome);
@@ -219,6 +228,8 @@ function carregarRespTarefa() {
   const filtroResp = document.getElementById('filtroTarefaResponsavel');
   const filtroSetor = document.getElementById('filtroTarefaSetor');
   
+  if (!tarefaResp || !filtroResp || !filtroSetor) return;
+  
   tarefaResp.innerHTML = '<option value="">Selecione um responsável</option>';
   filtroResp.innerHTML = '<option value="">Todos os responsáveis</option>';
   filtroSetor.innerHTML = '<option value="">Todos os setores</option>';
@@ -261,6 +272,8 @@ function addTarefa(e) {
 
 function listarTarefas(filtrados = tarefas) {
   const listaTarefas = document.getElementById('listaTarefas');
+  if (!listaTarefas) return;
+  
   listaTarefas.innerHTML = "";
   
   if (filtrados.length === 0) {
@@ -298,10 +311,10 @@ function listarTarefas(filtrados = tarefas) {
 }
 
 function filtrarTarefas() {
-  const filtroDesc = document.getElementById('filtroTarefaDesc').value.toLowerCase();
-  const filtroResp = document.getElementById('filtroTarefaResponsavel').value;
-  const filtroStatus = document.getElementById('filtroTarefaStatus').value;
-  const filtroSetor = document.getElementById('filtroTarefaSetor').value;
+  const filtroDesc = document.getElementById('filtroTarefaDesc')?.value.toLowerCase() || '';
+  const filtroResp = document.getElementById('filtroTarefaResponsavel')?.value || '';
+  const filtroStatus = document.getElementById('filtroTarefaStatus')?.value || '';
+  const filtroSetor = document.getElementById('filtroTarefaSetor')?.value || '';
   
   tarefasFiltradas = tarefas.filter(t => {
     const descMatch = t.descricao.toLowerCase().includes(filtroDesc);
@@ -353,6 +366,8 @@ function addVeiculo(e) {
 
 function listarVeiculos(filtrados = veiculos) {
   const listaVeiculos = document.getElementById('listaVeiculos');
+  if (!listaVeiculos) return;
+  
   listaVeiculos.innerHTML = "";
   
   if (filtrados.length === 0) {
@@ -381,9 +396,9 @@ function listarVeiculos(filtrados = veiculos) {
 }
 
 function filtrarVeiculos() {
-  const filtroPlaca = document.getElementById('filtroVeiculoPlaca').value.toUpperCase();
-  const filtroTipo = document.getElementById('filtroVeiculoTipo').value;
-  const filtroStatus = document.getElementById('filtroVeiculoStatus').value;
+  const filtroPlaca = document.getElementById('filtroVeiculoPlaca')?.value.toUpperCase() || '';
+  const filtroTipo = document.getElementById('filtroVeiculoTipo')?.value || '';
+  const filtroStatus = document.getElementById('filtroVeiculoStatus')?.value || '';
   
   veiculosFiltrados = veiculos.filter(v => {
     const placaMatch = v.placa.includes(filtroPlaca);
@@ -417,20 +432,39 @@ function removerVeiculo(id) {
 
 // ---------- DASHBOARD ----------
 function atualizarDashboard() {
+  console.log('Atualizando dashboard...');
+  
   const hoje = new Date().toISOString().split("T")[0];
   const pontoHoje = ponto.filter(p => p.data === hoje);
 
-  // Atualizar contadores
-  document.getElementById('dColabs').innerText = colaboradores.length;
-  document.getElementById('dPres').innerText = pontoHoje.filter(p => p.tipo === "Presente").length;
-  document.getElementById('dFalt').innerText = pontoHoje.filter(p => p.tipo === "Falta").length;
-  document.getElementById('dAtra').innerText = pontoHoje.filter(p => p.tipo === "Atraso").length;
+  // Atualizar contadores - com verificação robusta
+  const dColabs = document.getElementById('dColabs');
+  const dPres = document.getElementById('dPres');
+  const dFalt = document.getElementById('dFalt');
+  const dAtra = document.getElementById('dAtra');
+  const dTarPend = document.getElementById('dTarPend');
+  const dTarAnd = document.getElementById('dTarAnd');
+  const dTarConc = document.getElementById('dTarConc');
+  const dVeicAt = document.getElementById('dVeicAt');
+  const dVeicMan = document.getElementById('dVeicMan');
+  
+  if (dColabs) dColabs.innerText = colaboradores.length;
+  if (dPres) dPres.innerText = pontoHoje.filter(p => p.tipo === "Presente").length;
+  if (dFalt) dFalt.innerText = pontoHoje.filter(p => p.tipo === "Falta").length;
+  if (dAtra) dAtra.innerText = pontoHoje.filter(p => p.tipo === "Atraso").length;
 
-  document.getElementById('dTarPend').innerText = tarefas.filter(t => t.status === "Pendente").length;
-  document.getElementById('dTarAnd').innerText = tarefas.filter(t => t.status === "Em andamento").length;
-  document.getElementById('dTarConc').innerText = tarefas.filter(t => t.status === "Concluída").length;
+  if (dTarPend) dTarPend.innerText = tarefas.filter(t => t.status === "Pendente").length;
+  if (dTarAnd) dTarAnd.innerText = tarefas.filter(t => t.status === "Em andamento").length;
+  if (dTarConc) dTarConc.innerText = tarefas.filter(t => t.status === "Concluída").length;
 
-  // NOVO: Contadores detalhados de veículos por tipo
+  // Calcula veículos ativos e em manutenção
+  const veiculosAtivos = veiculos.filter(v => v.status === "Ativo").length;
+  const veiculosManutencao = veiculos.filter(v => v.status === "Manutenção").length;
+  
+  if (dVeicAt) dVeicAt.innerText = veiculosAtivos;
+  if (dVeicMan) dVeicMan.innerText = veiculosManutencao;
+
+  // NOVO: Calcula veículos por tipo com verificação
   const veiculosCarroAtivo = veiculos.filter(v => v.tipo === "Carro" && v.status === "Ativo").length;
   const veiculosCarroManutencao = veiculos.filter(v => v.tipo === "Carro" && v.status === "Manutenção").length;
   const veiculosMotoAtivo = veiculos.filter(v => v.tipo === "Moto" && v.status === "Ativo").length;
@@ -438,32 +472,30 @@ function atualizarDashboard() {
   const veiculosBicicletaAtivo = veiculos.filter(v => v.tipo === "Bicicleta" && v.status === "Ativo").length;
   const veiculosBicicletaManutencao = veiculos.filter(v => v.tipo === "Bicicleta" && v.status === "Manutenção").length;
 
-  // Totais
-  document.getElementById('dVeicAt').innerText = veiculos.filter(v => v.status === "Ativo").length;
-  document.getElementById('dVeicMan').innerText = veiculos.filter(v => v.status === "Manutenção").length;
-
-  // Atualizar detalhes por tipo
+  // Atualizar detalhes por tipo - com verificação de elemento
   const detalhesVeiculos = document.getElementById('detalhesVeiculos');
-  detalhesVeiculos.innerHTML = `
-    <div class="tipo-veiculo">
-      <span>🚗 Carros:</span>
-      <span class="ativo">${veiculosCarroAtivo} ativos</span>
-      <span class="manutencao">${veiculosCarroManutencao} em manutenção</span>
-      <span class="total">${veiculosCarroAtivo + veiculosCarroManutencao} total</span>
-    </div>
-    <div class="tipo-veiculo">
-      <span>🏍️ Motos:</span>
-      <span class="ativo">${veiculosMotoAtivo} ativos</span>
-      <span class="manutencao">${veiculosMotoManutencao} em manutenção</span>
-      <span class="total">${veiculosMotoAtivo + veiculosMotoManutencao} total</span>
-    </div>
-    <div class="tipo-veiculo">
-      <span>🚲 Bicicletas:</span>
-      <span class="ativo">${veiculosBicicletaAtivo} ativos</span>
-      <span class="manutencao">${veiculosBicicletaManutencao} em manutenção</span>
-      <span class="total">${veiculosBicicletaAtivo + veiculosBicicletaManutencao} total</span>
-    </div>
-  `;
+  if (detalhesVeiculos) {
+    detalhesVeiculos.innerHTML = `
+      <div class="tipo-veiculo">
+        <span>🚗 Carros:</span>
+        <span class="ativo">${veiculosCarroAtivo} ativos</span>
+        <span class="manutencao">${veiculosCarroManutencao} em manutenção</span>
+        <span class="total">${veiculosCarroAtivo + veiculosCarroManutencao} total</span>
+      </div>
+      <div class="tipo-veiculo">
+        <span>🏍️ Motos:</span>
+        <span class="ativo">${veiculosMotoAtivo} ativos</span>
+        <span class="manutencao">${veiculosMotoManutencao} em manutenção</span>
+        <span class="total">${veiculosMotoAtivo + veiculosMotoManutencao} total</span>
+      </div>
+      <div class="tipo-veiculo">
+        <span>🚲 Bicicletas:</span>
+        <span class="ativo">${veiculosBicicletaAtivo} ativos</span>
+        <span class="manutencao">${veiculosBicicletaManutencao} em manutenção</span>
+        <span class="total">${veiculosBicicletaAtivo + veiculosBicicletaManutencao} total</span>
+      </div>
+    `;
+  }
 
   // Presença por função
   const porFuncao = {};
@@ -475,20 +507,22 @@ function atualizarDashboard() {
   });
 
   const presencaPorFuncao = document.getElementById('presencaPorFuncao');
-  presencaPorFuncao.innerHTML = "";
-  
-  if (Object.keys(porFuncao).length === 0) {
-    presencaPorFuncao.innerHTML = '<li class="sem-registros">Nenhum registro de ponto hoje</li>';
-  } else {
-    Object.keys(porFuncao).forEach(f => {
-      presencaPorFuncao.innerHTML += `
-        <li>
-          <strong>${f}</strong> →
-          ✅ ${porFuncao[f].Presente} |
-          ❌ ${porFuncao[f].Falta} |
-          ⏰ ${porFuncao[f].Atraso}
-        </li>`;
-    });
+  if (presencaPorFuncao) {
+    presencaPorFuncao.innerHTML = "";
+    
+    if (Object.keys(porFuncao).length === 0) {
+      presencaPorFuncao.innerHTML = '<li class="sem-registros">Nenhum registro de ponto hoje</li>';
+    } else {
+      Object.keys(porFuncao).forEach(f => {
+        presencaPorFuncao.innerHTML += `
+          <li>
+            <strong>${f}</strong> →
+            ✅ ${porFuncao[f].Presente} |
+            ❌ ${porFuncao[f].Falta} |
+            ⏰ ${porFuncao[f].Atraso}
+          </li>`;
+      });
+    }
   }
 
   // Alerta de desfalque
@@ -503,18 +537,22 @@ function atualizarDashboard() {
   const listaDesfalque = document.getElementById('listaDesfalque');
   const alertaDesfalque = document.getElementById('alertaDesfalque');
   
-  listaDesfalque.innerHTML = "";
-  let alerta = false;
+  if (listaDesfalque && alertaDesfalque) {
+    listaDesfalque.innerHTML = "";
+    let alerta = false;
 
-  Object.keys(limites).forEach(f => {
-    const faltas = porFuncao[f]?.Falta || 0;
-    if (faltas >= limites[f]) {
-      alerta = true;
-      listaDesfalque.innerHTML += `<li>${f}: ${faltas} falta(s) - Limite: ${limites[f]}</li>`;
-    }
-  });
+    Object.keys(limites).forEach(f => {
+      const faltas = porFuncao[f]?.Falta || 0;
+      if (faltas >= limites[f]) {
+        alerta = true;
+        listaDesfalque.innerHTML += `<li>${f}: ${faltas} falta(s) - Limite: ${limites[f]}</li>`;
+      }
+    });
 
-  alertaDesfalque.style.display = alerta ? "block" : "none";
+    alertaDesfalque.style.display = alerta ? "block" : "none";
+  }
+  
+  console.log('Dashboard atualizada com sucesso!');
 }
 
 // ---------- BACKUP ----------
@@ -592,26 +630,67 @@ function atualizarTudo() {
   atualizarDashboard();
 }
 
-// Inicializar
-window.addEventListener('DOMContentLoaded', () => {
-  console.log('Aplicação iniciada');
+// ---------- INICIALIZAÇÃO ROBUSTA ----------
+function inicializarAplicacao() {
+  console.log('Inicializando aplicação...');
   
-  // Configurar datas
+  // Configurar data atual
   const hoje = new Date().toISOString().split("T")[0];
+  
+  // Configurar datas nos campos
   const pontoData = document.getElementById('pontoData');
+  if (pontoData) {
+    pontoData.value = hoje;
+  }
+  
   const filtroPontoData = document.getElementById('filtroPontoData');
+  if (filtroPontoData) {
+    filtroPontoData.value = hoje;
+  }
   
-  if (pontoData) pontoData.value = hoje;
-  if (filtroPontoData) filtroPontoData.value = hoje;
-  
-  // Forçar atualização inicial do dashboard
+  // Atualizar tudo com delay para garantir que o DOM está pronto
   setTimeout(() => {
+    atualizarTudo();
+    
+    // Verificar se estamos na dashboard e forçar atualização
+    const dashboardAtiva = document.getElementById('dashboard')?.classList.contains('ativa');
+    if (dashboardAtiva) {
+      console.log('Dashboard ativa, forçando atualização...');
+      setTimeout(atualizarDashboard, 300);
+    }
+  }, 300);
+}
+
+// Aguardar DOM completamente carregado
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', inicializarAplicacao);
+} else {
+  // DOM já carregado
+  inicializarAplicacao();
+}
+
+// Atualizar dashboard periodicamente quando visível
+setInterval(() => {
+  const dashboardAtiva = document.getElementById('dashboard')?.classList.contains('ativa');
+  if (dashboardAtiva) {
     atualizarDashboard();
-  }, 100);
-  
-  // Aplicar filtros iniciais
-  filtrarColaboradores();
-  filtrarTarefas();
-  filtrarVeiculos();
-  filtrarPonto();
+  }
+}, 10000); // Atualiza a cada 10 segundos
+
+// Forçar atualização quando a janela ganha foco (útil para mobile)
+window.addEventListener('focus', () => {
+  const dashboardAtiva = document.getElementById('dashboard')?.classList.contains('ativa');
+  if (dashboardAtiva) {
+    atualizarDashboard();
+  }
+});
+
+// Forçar atualização quando a página fica visível (mobile)
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    const dashboardAtiva = document.getElementById('dashboard')?.classList.contains('ativa');
+    if (dashboardAtiva) {
+      setTimeout(atualizarDashboard, 100);
+    }
+  }
 });
