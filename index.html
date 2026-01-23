@@ -32,23 +32,50 @@
   <h2>📊 Visão Geral (Hoje)</h2>
 
   <div class="cards">
-    <div class="card">👥 Colaboradores<br><span id="dColabs">0</span></div>
-    <div class="card">✅ Presentes<br><span id="dPres">0</span></div>
-    <div class="card">❌ Faltas<br><span id="dFalt">0</span></div>
-    <div class="card">⏰ Atrasos<br><span id="dAtra">0</span></div>
+    <div class="card" onclick="mostrar('colaboradores')">
+      👥 Colaboradores<br>
+      <span id="dColabs">0</span>
+    </div>
+    <div class="card" onclick="mostrar('ponto')">
+      ✅ Presentes<br>
+      <span id="dPres">0</span>
+    </div>
+    <div class="card" onclick="mostrar('ponto')">
+      ❌ Faltas<br>
+      <span id="dFalt">0</span>
+    </div>
+    <div class="card" onclick="mostrar('ponto')">
+      ⏰ Atrasos<br>
+      <span id="dAtra">0</span>
+    </div>
   </div>
 
   <h3>📦 Tarefas</h3>
   <div class="cards">
-    <div class="card">🟠 Pendentes<br><span id="dTarPend">0</span></div>
-    <div class="card">🟡 Em andamento<br><span id="dTarAnd">0</span></div>
-    <div class="card">🟢 Concluídas<br><span id="dTarConc">0</span></div>
+    <div class="card" onclick="mostrar('tarefas')">
+      🟠 Pendentes<br>
+      <span id="dTarPend">0</span>
+    </div>
+    <div class="card" onclick="mostrar('tarefas')">
+      🟡 Em andamento<br>
+      <span id="dTarAnd">0</span>
+    </div>
+    <div class="card" onclick="mostrar('tarefas')">
+      🟢 Concluídas<br>
+      <span id="dTarConc">0</span>
+    </div>
   </div>
 
   <h3>🚗 Veículos</h3>
   <div class="cards">
-    <div class="card">✅ Ativos<br><span id="dVeicAt">0</span></div>
-    <div class="card">🛠️ Manutenção<br><span id="dVeicMan">0</span></div>
+    <div class="card" onclick="mostrar('veiculos')">
+      ✅ Ativos<br>
+      <span id="dVeicAt">0</span>
+    </div>
+    <div class="card" onclick="mostrar('veiculos')">
+      🛠️ Manutenção<br>
+      <span id="dVeicMan">0</span>
+    </div>
   </div>
 
   <h3>📌 Presença por Função</h3>
@@ -72,6 +99,18 @@
 <!-- COLABORADORES -->
 <section id="colaboradores" class="tela">
   <h2>👥 Colaboradores</h2>
+  <div class="filtros">
+    <input type="text" id="filtroColab" placeholder="🔍 Filtrar por nome..." oninput="filtrarColaboradores()">
+    <select id="filtroColabFuncao" onchange="filtrarColaboradores()">
+      <option value="">Todas as funções</option>
+      <option>Motorista</option>
+      <option>Motociclista</option>
+      <option>Pedestre</option>
+      <option>Bicicleta</option>
+      <option>Interno</option>
+      <option>Gestão</option>
+    </select>
+  </div>
   <form onsubmit="addColaborador(event)">
     <input id="colabNome" required placeholder="Nome">
     <select id="colabFuncao">
@@ -90,6 +129,25 @@
 <!-- PONTO -->
 <section id="ponto" class="tela">
   <h2>🕒 Ponto Diário</h2>
+  <div class="filtros">
+    <input type="text" id="filtroPontoColab" placeholder="🔍 Filtrar por nome..." oninput="filtrarPonto()">
+    <select id="filtroPontoTipo" onchange="filtrarPonto()">
+      <option value="">Todos os status</option>
+      <option>Presente</option>
+      <option>Falta</option>
+      <option>Atraso</option>
+    </select>
+    <select id="filtroPontoFuncao" onchange="filtrarPonto()">
+      <option value="">Todas as funções</option>
+      <option>Motorista</option>
+      <option>Motociclista</option>
+      <option>Pedestre</option>
+      <option>Bicicleta</option>
+      <option>Interno</option>
+      <option>Gestão</option>
+    </select>
+    <input type="date" id="filtroPontoData" onchange="filtrarPonto()">
+  </div>
   <form onsubmit="registrarPonto(event)">
     <select id="pontoColab"></select>
     <input type="date" id="pontoData" required>
@@ -107,6 +165,21 @@
 <!-- TAREFAS -->
 <section id="tarefas" class="tela">
   <h2>📦 Tarefas</h2>
+  <div class="filtros">
+    <input type="text" id="filtroTarefaDesc" placeholder="🔍 Filtrar por descrição..." oninput="filtrarTarefas()">
+    <select id="filtroTarefaResponsavel" onchange="filtrarTarefas()">
+      <option value="">Todos os responsáveis</option>
+    </select>
+    <select id="filtroTarefaStatus" onchange="filtrarTarefas()">
+      <option value="">Todos os status</option>
+      <option>Pendente</option>
+      <option>Em andamento</option>
+      <option>Concluída</option>
+    </select>
+    <select id="filtroTarefaSetor" onchange="filtrarTarefas()">
+      <option value="">Todos os setores</option>
+    </select>
+  </div>
   <form onsubmit="addTarefa(event)">
     <input id="tarefaDesc" required placeholder="Descrição">
     <input id="tarefaSetor" placeholder="Setor">
@@ -124,6 +197,20 @@
 <!-- VEÍCULOS -->
 <section id="veiculos" class="tela">
   <h2>🚗 Veículos</h2>
+  <div class="filtros">
+    <input type="text" id="filtroVeiculoPlaca" placeholder="🔍 Filtrar por placa..." oninput="filtrarVeiculos()">
+    <select id="filtroVeiculoTipo" onchange="filtrarVeiculos()">
+      <option value="">Todos os tipos</option>
+      <option>Carro</option>
+      <option>Moto</option>
+      <option>Bicicleta</option>
+    </select>
+    <select id="filtroVeiculoStatus" onchange="filtrarVeiculos()">
+      <option value="">Todos os status</option>
+      <option>Ativo</option>
+      <option>Manutenção</option>
+    </select>
+  </div>
   <form onsubmit="addVeiculo(event)">
     <input id="veicPlaca" required placeholder="Placa / ID">
     <select id="veicTipo">
