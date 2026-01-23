@@ -31,18 +31,36 @@ function listarColaboradores() {
 // ---------- PONTO ----------
 function carregarColabsPonto() {
   pontoColab.innerHTML = "";
-  colaboradores.forEach(c => pontoColab.innerHTML += `<option>${c.nome}</option>`);
+  colaboradores.forEach(c => {
+    pontoColab.innerHTML += `<option>${c.nome}</option>`;
+  });
 }
 
 function registrarPonto(e) {
   e.preventDefault();
-  ponto.push({
-    colaborador: pontoColab.value,
-    funcao: colaboradores.find(c => c.nome === pontoColab.value)?.funcao || "",
-    data: pontoData.value,
-    tipo: pontoTipo.value,
-    obs: pontoObs.value
-  });
+
+  const data = pontoData.value;
+  const colaborador = pontoColab.value;
+
+  // impede duplicar ponto no mesmo dia
+  const existente = ponto.find(
+    p => p.colaborador === colaborador && p.data === data
+  );
+
+  if (existente) {
+    existente.tipo = pontoTipo.value;
+    existente.obs = pontoObs.value;
+  } else {
+    ponto.push({
+      id: Date.now(), // ID ÚNICO
+      colaborador,
+      funcao: colaboradores.find(c => c.nome === colaborador)?.funcao || "",
+      data,
+      tipo: pontoTipo.value,
+      obs: pontoObs.value
+    });
+  }
+
   salvar();
   e.target.reset();
 }
@@ -50,19 +68,38 @@ function registrarPonto(e) {
 function listarPonto() {
   listaPonto.innerHTML = "";
   const hoje = new Date().toISOString().split("T")[0];
-  ponto.filter(p => p.data === hoje).forEach((p, i) => {
-    listaPonto.innerHTML += `
-      <li>
-        ${p.colaborador} (${p.funcao})<br>
-        <select onchange="ponto[${i}].tipo=this.value;salvar()">
-          <option ${p.tipo==='Presente'?'selected':''}>Presente</option>
-          <option ${p.tipo==='Falta'?'selected':''}>Falta</option>
-          <option ${p.tipo==='Atraso'?'selected':''}>Atraso</option>
-        </select>
-        <input value="${p.obs}" onchange="ponto[${i}].obs=this.value;salvar()">
-      </li>`;
-  });
+
+  ponto
+    .filter(p => p.data === hoje)
+    .forEach(p => {
+      listaPonto.innerHTML += `
+        <li>
+          <strong>${p.colaborador}</strong> (${p.funcao})<br>
+
+          <select onchange="alterarPonto(${p.id}, 'tipo', this.value)">
+            <option ${p.tipo === 'Presente' ? 'selected' : ''}>Presente</option>
+            <option ${p.tipo === 'Falta' ? 'selected' : ''}>Falta</option>
+            <option ${p.tipo === 'Atraso' ? 'selected' : ''}>Atraso</option>
+          </select>
+
+          <input
+            value="${p.obs || ''}"
+            placeholder="Observação"
+            onchange="alterarPonto(${p.id}, 'obs', this.value)"
+          >
+        </li>
+      `;
+    });
 }
+
+function alterarPonto(id, campo, valor) {
+  const registro = ponto.find(p => p.id === id);
+  if (!registro) return;
+
+  registro[campo] = valor;
+  salvar();
+}
+
 
 // ---------- TAREFAS ----------
 function carregarRespTarefa() {
